@@ -21,41 +21,65 @@ namespace Tests
         [Test]
         public void PrestarLibro_LibroDisponible_PrestaLibroCorrectamente()
         {
+            // Arrange
+            var titulo = "1984";
+
             // Act
+            _biblioteca.PrestarLibro(titulo);
 
             // Assert
+            Assert.IsTrue(_libro1.EstaPrestado);
         }
 
         [Test]
         public void PrestarLibro_LibroNoDisponible_LanzaExcepcion()
         {
-            // Act
+            // Arrange
+            var titulo = "Libro Inexistente";
 
-            // Assert
+            // Act & Assert
+            Assert.Throws<InvalidOperationException>(() => _biblioteca.PrestarLibro(titulo));
         }
 
         [Test]
         public void DevolverLibro_LibroPrestado_DevolveLibroCorrectamente()
         {
+            // Arrange
+            var titulo = "1984";
+            _biblioteca.PrestarLibro(titulo);
+
             // Act
+            _biblioteca.DevolverLibro(titulo);
 
             // Assert
+            Assert.IsFalse(_libro1.EstaPrestado);
         }
 
         [Test]
         public void DevolverLibro_LibroNoPrestado_LanzaExcepcion()
         {
-            // Act
+            // Arrange
+            var titulo = "1984";
 
-            // Assert
+            // Act & Assert
+            Assert.Throws<InvalidOperationException>(() => _biblioteca.DevolverLibro(titulo));
         }
 
         [Test]
         public void ObtenerLibros_RetornaListaDeLibros()
         {
+            // Arrange
+
             // Act
+            var libros = _biblioteca.ObtenerLibros();
 
             // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(2, libros.Count);
+                Assert.Contains(_libro1, libros);
+                Assert.Contains(_libro2, libros);
+            });
         }
     }
 }
